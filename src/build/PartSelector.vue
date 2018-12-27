@@ -1,6 +1,6 @@
 <template>
   <div :class="[position, 'part']">
-    <img :src="selectedPart.src" title="arm"/>
+    <img @click="showPartInfo()" :src="selectedPart.src" :title="selectedPart.title"/>
     <button @click="selectPreviousPart()" class="prev-selector"></button>
     <button @click="selectNextPart()" class="next-selector"></button>
     <span class="sale" v-if="selectedPart.onSale">Sale!</span>
@@ -47,6 +47,15 @@ export default {
     this.emitSelectedPart();
   },
   methods: {
+    showPartInfo() {
+      this.$router.push({
+        name: 'Parts',
+        params: {
+          partType: this.selectedPart.type,
+          id: this.selectedPart.id,
+        },
+      });
+    },
     emitSelectedPart() {
       this.$emit('partSelected', this.selectedPart);
     },
@@ -68,7 +77,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .part {
   position: relative;
   width:165px;
@@ -92,9 +101,14 @@ export default {
   padding-top: 5px;
   top: -25px;
 }
-.part img {
-  width:165px;
+
+.part {
+  img {
+    width:165px;
+    cursor: pointer;
+  }
 }
+
 .top {
   border-bottom: none;
 }
@@ -107,8 +121,10 @@ export default {
 .bottom {
   border-top: none;
 }
-.left img {
-  transform: rotate(-90deg);
+.left {
+  img {
+    transform: rotate(-90deg);
+  }
 }
 .right img {
   transform: rotate(90deg);

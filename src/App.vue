@@ -14,12 +14,30 @@
                 Build
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{ name: 'BrowseParts', params: {} }" exact>
+                Browse
+            </router-link>
+          </li>
+          <li class="nav-item cart">
+            <router-link class="nav-link" to="/cart" exact>
+                Cart
+            </router-link>
+            <div class="cart-items">
+                {{cart.length}}
+            </div>
+          </li>
         </ul>
       </nav>
     </header>
-    <main>
-      <router-view/>
-    </main>
+    <div class="container">
+      <aside class="aside">
+        <router-view name="sidebar"></router-view>
+      </aside>
+      <main>
+        <router-view/>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -27,6 +45,11 @@
 
 export default {
   name: 'app',
+  computed: {
+    cart() {
+      return this.$store.state.cart;
+    },
+  },
 };
 </script>
 
@@ -39,10 +62,9 @@ body {
 
 <style scoped>
 main {
-    margin: 0 auto;
     padding: 30px;
     background-color: white;
-    width: 1024px;
+    width: 964px;
     min-height: 300px;
 }
 #app {
@@ -50,7 +72,7 @@ main {
 }
 header {
   background-color: #999;
-  width: 1084px;
+  width: 1184px;
   margin: 0 auto;
 }
 ul {
@@ -73,5 +95,33 @@ ul {
 }
 .router-link-active {
   color:white;
+}
+.container {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1184px;
+}
+.aside {
+  min-height: 300px;
+  width: 100px;
+  background-color: #aaa;
+  padding: 30px;
+}
+.nav-item.cart {
+  margin-left: auto;
+  border-right: none;
+  position: relative;
+}
+.cart-items {
+  position: absolute;
+  top: -5px;
+  right: -13px;
+  font-size: 18px;
+  width: 25px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 100px;
+  background-color: mediumseagreen;
 }
 </style>

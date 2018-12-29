@@ -51,21 +51,6 @@
       position="bottom"
       @partSelected="part => selectedRobot.base = part"/>
   </div>
-  <div>
-    <h1>Cart</h1>
-    <table>
-      <thead>
-        <th>Robot</th>
-        <th class="cost">Cost</th>
-      </thead>
-      <tbody>
-        <tr v-for="(robot, index) in cart" :key="index">
-          <td>{{robot.head.title}}</td>
-          <td class="cost">{{robot.cost}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </div>
 </template>
 
@@ -78,10 +63,19 @@ import CollapsibleSection from '../shared/CollapsibleSection.vue';
 export default {
   name: 'RobotBuilder',
   components: { PartSelector, CollapsibleSection },
+  beforeRouteLeave(to, from, next) {
+    if (this.addedToCart === true) {
+      next(true);
+    } else {
+      /* eslint no-alert: 0 */
+      /* eslint no-restricted-globals: 0 */
+      const response = confirm('You have not added your robot to your cart. Are you sure you want to leave?');
+      next(response);
+    }
+  },
   data() {
     return {
       availableParts,
-      cart: [],
       selectedRobot: {
         head: {},
         leftArm: {},
@@ -93,6 +87,12 @@ export default {
   },
   mixins: [createdHookMixin],
   computed: {
+    cart() {
+      return this.$store.state.cart;
+    },
+    addedToCart() {
+      return this.cart.length > 0;
+    },
     saleBorderClass() {
       return { 'sale-border': this.selectedRobot.head.onSale };
     },
@@ -106,7 +106,7 @@ export default {
         + robot.torso.cost
         + robot.rightArm.cost
         + robot.base.cost;
-      this.cart.push(Object.assign({}, robot, { cost }));
+      this.$store.commit('addRobotToCart', Object.assign({}, robot, { cost }));
     },
   },
 };
@@ -238,16 +238,8 @@ export default {
   background-color: #888888;
   box-shadow: inset 0 0 10px #555555;
 }
-td, th {
-  text-align: left;
-  padding: 5px;
-  padding-right: 20px;
-}
 .content {
   position: relative;
-}
-tbody tr:nth-of-type(odd) {
-  background-color: rgba(0,0,0,.05);
 }
 .sale-border {
   border: 3px solid red;

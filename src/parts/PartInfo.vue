@@ -27,7 +27,7 @@ export default {
   computed: {
     part() {
       const { partType, id } = this;
-      return parts[partType].find(x => x.id === parseInt(id, 10));
+      return parts[partType].find((x) => x.id === parseInt(id, 10));
     },
   },
 };

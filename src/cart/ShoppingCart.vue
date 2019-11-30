@@ -77,6 +77,7 @@ export default {
   }
   .sale-items {
     margin-top: 50px;
+    font-size: 18px;
     color: red;
   }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <!-- Investigate part further -->
   <div :class="[position, 'part']">
     <img @click="showPartInfo()" :src="selectedPart.src" :title="selectedPart.title"/>
     <button @click="selectPreviousPart()" class="prev-selector"></button>
